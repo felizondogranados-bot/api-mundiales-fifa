@@ -1,5 +1,6 @@
 import express from 'express';
 import mundialesRouter from './src/routes/mundiales.routes.js';
+import { notFoundRouteHandler, errorHandler } from './src/middlewares/errors.js';
 
 const app = express();
 
@@ -19,14 +20,9 @@ app.get('/', (req, res) => {
 });
 
 // Middleware para manejar endpoints no encontrados (404)
-app.use((req, res) => {
-  res.status(404).json({ error: 'Ruta no encontrada.' });
-});
+app.use(notFoundRouteHandler);
 
 // Middleware global para manejo de errores
-app.use((err, req, res, next) => {
-  console.error('Error no controlado:', err.stack);
-  res.status(500).json({ error: 'Ocurrió un error interno en el servidor.' });
-});
+app.use(errorHandler);
 
 export default app;

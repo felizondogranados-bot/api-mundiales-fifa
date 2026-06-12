@@ -1,18 +1,18 @@
 import * as mundialModel from '../models/mundial.model.js';
+import { NotFoundError } from '../middlewares/errors.js';
 
 /**
  * Obtiene todos los mundiales.
  * HTTP 200: Éxito. Retorna la lista de mundiales.
  * HTTP 500: Error interno del servidor.
  */
-export async function getAllMundiales(req, res) {
+export async function getAllMundiales(req, res, next) {
   try {
     const includeFull = req.query.include === 'full';
     const mundiales = await mundialModel.getAll(includeFull);
     res.status(200).json(mundiales);
   } catch (error) {
-    console.error('Error en getAllMundiales:', error);
-    res.status(500).json({ error: 'Ocurrió un error al obtener los mundiales.' });
+    next(error);
   }
 }
 
@@ -23,7 +23,7 @@ export async function getAllMundiales(req, res) {
  * HTTP 404: No encontrado.
  * HTTP 500: Error interno del servidor.
  */
-export async function getMundialBySlug(req, res) {
+export async function getMundialBySlug(req, res, next) {
   try {
     const { slug } = req.params;
     if (!slug) {
@@ -32,13 +32,12 @@ export async function getMundialBySlug(req, res) {
 
     const mundial = await mundialModel.getBySlug(slug);
     if (!mundial) {
-      return res.status(404).json({ error: `No se encontró ningún mundial con el slug "${slug}".` });
+      return next(new NotFoundError());
     }
 
     res.status(200).json(mundial);
   } catch (error) {
-    console.error(`Error en getMundialBySlug para slug "${req.params.slug}":`, error);
-    res.status(500).json({ error: 'Ocurrió un error al obtener el mundial.' });
+    next(error);
   }
 }
 
@@ -48,7 +47,7 @@ export async function getMundialBySlug(req, res) {
  * HTTP 400: Solicitud incorrecta si no se proporciona el país.
  * HTTP 500: Error interno del servidor.
  */
-export async function getMundialesByChampion(req, res) {
+export async function getMundialesByChampion(req, res, next) {
   try {
     const { pais } = req.params;
     if (!pais) {
@@ -58,8 +57,7 @@ export async function getMundialesByChampion(req, res) {
     const mundiales = await mundialModel.getByChampion(pais);
     res.status(200).json(mundiales);
   } catch (error) {
-    console.error(`Error en getMundialesByChampion para país "${req.params.pais}":`, error);
-    res.status(500).json({ error: 'Ocurrió un error al obtener los mundiales por campeón.' });
+    next(error);
   }
 }
 
@@ -69,17 +67,16 @@ export async function getMundialesByChampion(req, res) {
  * HTTP 404: No encontrado si la base de datos está vacía.
  * HTTP 500: Error interno del servidor.
  */
-export async function getRandomMundial(req, res) {
+export async function getRandomMundial(req, res, next) {
   try {
     const mundial = await mundialModel.getRandom();
     if (!mundial) {
-      return res.status(404).json({ error: 'No se encontró ningún mundial en la base de datos.' });
+      return next(new NotFoundError());
     }
 
     res.status(200).json(mundial);
   } catch (error) {
-    console.error('Error en getRandomMundial:', error);
-    res.status(500).json({ error: 'Ocurrió un error al obtener un mundial aleatorio.' });
+    next(error);
   }
 }
 
@@ -90,7 +87,7 @@ export async function getRandomMundial(req, res) {
  * HTTP 400: Solicitud incorrecta si no se proporciona el parámetro de búsqueda "q".
  * HTTP 500: Error interno del servidor.
  */
-export async function searchMundiales(req, res) {
+export async function searchMundiales(req, res, next) {
   try {
     const q = req.params.text || req.query.q;
     if (q === undefined || q.trim() === '') {
@@ -100,7 +97,6 @@ export async function searchMundiales(req, res) {
     const resultados = await mundialModel.search(q.trim());
     res.status(200).json(resultados);
   } catch (error) {
-    console.error(`Error en searchMundiales con búsqueda "${req.params.text || req.query.q}":`, error);
-    res.status(500).json({ error: 'Ocurrió un error al realizar la búsqueda de mundiales.' });
+    next(error);
   }
 }
