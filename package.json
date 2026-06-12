@@ -1,0 +1,26 @@
+{
+  "name": "api-mundiales-fifa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "init-db": "node src/database/init.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felizondogranados-bot/api-mundiales-fifa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/felizondogranados-bot/api-mundiales-fifa/issues"
+  },
+  "homepage": "https://github.com/felizondogranados-bot/api-mundiales-fifa#readme",
+  "dependencies": {
+    "sqlite": "^5.1.1",
+    "sqlite3": "^6.0.1"
+  }
+}
