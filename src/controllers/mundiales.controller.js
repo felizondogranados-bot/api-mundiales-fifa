@@ -7,7 +7,8 @@ import * as mundialModel from '../models/mundial.model.js';
  */
 export async function getAllMundiales(req, res) {
   try {
-    const mundiales = await mundialModel.getAll();
+    const includeFull = req.query.include === 'full';
+    const mundiales = await mundialModel.getAll(includeFull);
     res.status(200).json(mundiales);
   } catch (error) {
     console.error('Error en getAllMundiales:', error);

@@ -2,11 +2,15 @@ import getDb from '../database/db.js';
 
 /**
  * Obtiene todos los mundiales de la base de datos.
+ * @param {boolean} [full=false] - Si es verdadero, retorna todas las columnas. Si es falso, retorna un subconjunto ligero.
  * @returns {Promise<Array<Object>>} Lista de todos los mundiales.
  */
-export async function getAll() {
+export async function getAll(full = false) {
   const db = await getDb();
-  return db.all('SELECT * FROM mundiales ORDER BY anio DESC');
+  if (full) {
+    return db.all('SELECT * FROM mundiales ORDER BY anio DESC');
+  }
+  return db.all('SELECT id, nombre, anio, sede, campeon, slug, imagen FROM mundiales ORDER BY anio DESC');
 }
 
 /**
