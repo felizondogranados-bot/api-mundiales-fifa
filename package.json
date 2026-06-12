@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "init-db": "node src/database/init.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/felizondogranados-bot/api-mundiales-fifa#readme",
   "dependencies": {
+    "express": "^5.2.1",
     "sqlite": "^5.1.1",
     "sqlite3": "^6.0.1"
   }

@@ -91,15 +91,15 @@ export async function getRandomMundial(req, res) {
  */
 export async function searchMundiales(req, res) {
   try {
-    const { q } = req.query;
+    const q = req.params.text || req.query.q;
     if (q === undefined || q.trim() === '') {
-      return res.status(400).json({ error: 'El parámetro de consulta de búsqueda "q" es requerido y no puede estar vacío.' });
+      return res.status(400).json({ error: 'El parámetro de búsqueda es requerido y no puede estar vacío.' });
     }
 
     const resultados = await mundialModel.search(q.trim());
     res.status(200).json(resultados);
   } catch (error) {
-    console.error(`Error en searchMundiales con query "${req.query.q}":`, error);
+    console.error(`Error en searchMundiales con búsqueda "${req.params.text || req.query.q}":`, error);
     res.status(500).json({ error: 'Ocurrió un error al realizar la búsqueda de mundiales.' });
   }
 }
